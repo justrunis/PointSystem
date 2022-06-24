@@ -5,7 +5,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     require_once "config.php";
     
     // Prepare a delete statement
-    $sql = "DELETE FROM students WHERE id = ?";
+    $sql = "DELETE FROM evaluations WHERE id = ?";
     
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
@@ -17,10 +17,10 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
             // Records deleted successfully. Redirect to landing page
-            header("location: index.php");
+            header("location: instructions.php");
             exit();
         } else{
-            echo "Klaida.";
+            echo "Klaida";
         }
     }
      
@@ -43,7 +43,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <title>Pašalinti studentą</title>
+    <title>Kriterijaus šalinimas</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{
@@ -57,14 +57,14 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="mt-5 mb-3">Pašalinti studentą</h2>
+                    <h2 class="mt-5 mb-3">Pašalinti kriterijų</h2>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="alert alert-danger">
                             <input type="hidden" name="id" value="<?php echo trim($_GET["id"]); ?>"/>
-                            <p>Ar tikrai norite pašalinti šį studentą?</p>
+                            <p>Ar tikrai norite pašalinti šį kriterijų?</p>
                             <p>
                                 <input type="submit" value="Taip" class="btn btn-danger">
-                                <a href="index.php" class="btn btn-secondary">Ne</a>
+                                <a href="instructions.php" class="btn btn-secondary">Ne</a>
                             </p>
                         </div>
                     </form>

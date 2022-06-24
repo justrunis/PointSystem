@@ -3,59 +3,49 @@
 require_once "config.php";
  
 // Define variables and initialize with empty values
-$name = $surename = $points = "";
-$name_err = $surename_err = $points_err = "";
+$name = $surename = $value = "";
+$name_err = $value_err = "";
  
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate name
     $input_name = trim($_POST["name"]);
     if(empty($input_name)){
-        $name_err = "Įveskite vardą";
+        $name_err = "Įveskite pavadinimą";
     } else{
         $name = $input_name;
     }
     
-    // Validate surename
-    $input_surename = trim($_POST["surename"]);
-    if(empty($input_surename)){
-        $surename_err = "Įveskite pavardę";     
-    }
-    }else{
-        $surename = $input_surename;
-    }
-    
-    // Validate points
-    $input_points = trim($_POST["points"]);
-    if(empty($input_points)){
-        $points_err = "Įveskite taškų kiekį";     
-    } elseif(!ctype_digit($input_points)){
-        $points_err = "Įveskite teigiamą skaičių";
+    // Validate value
+    $input_value = trim($_POST["value"]);
+    if(empty($input_value)){
+        $value_err = "Įveskite vertę";     
+    } elseif(!is_numeric($input_value)){
+        $value_err = "Įveskite skaičių";
     } else{
-        $points = $input_points;
+        $value = $input_value;
     }
     
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($surename_err) && empty($points_err)){
+    if(empty($name_err) && empty($value_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO students (name, surename, points) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO evaluations (name, value) VALUES (?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_name, $param_surename, $param_points);
+            mysqli_stmt_bind_param($stmt, "ss", $param_name, $param_value);
             
             // Set parameters
             $param_name = $name;
-            $param_surename = $surename;
-            $param_points = $points;
+            $param_value = $value;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Records created successfully. Redirect to landing page
-                header("location: index.php");
+                header("location: instructions.php");
                 exit();
             } else{
-                echo "Klaida.";
+                echo "Klaida";
             }
         }
          
@@ -72,7 +62,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <title>Add student</title>
+    <title>Pridėti kriterijų</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{
@@ -86,26 +76,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="mt-5">Studento pridėjimas</h2>
-                    <p>Užpildykite žemiau esančią formą, kad studentas būtų pridėtas prie duomenų bazės</p>
+                    <h2 class="mt-5">Naujo kriterijaus pridėjimas</h2>
+                    <p>Įveskite naują vertinimo kriterijų</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                         <div class="form-group">
-                            <label>Studento vardas</label>
+                            <label>Pavadinimas</label>
                             <input type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
                             <span class="invalid-feedback"><?php echo $name_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Studento pavardė</label>
-                            <input type="text" name="surename" class="form-control <?php echo (!empty($surename_err)) ? 'is-invalid' : ''; ?>"><?php echo $surename; ?></input>
-                            <span class="invalid-feedback"><?php echo $surename_err;?></span>
-                        </div>
-                        <div class="form-group">
-                            <label>Studento taškų kiekis</label>
-                            <input type="text" name="points" class="form-control <?php echo (!empty($points_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $points; ?>">
-                            <span class="invalid-feedback"><?php echo $points_err;?></span>
+                            <label>Taškų kiekis</label>
+                            <input type="text" name="value" class="form-control <?php echo (!empty($value_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $value; ?>">
+                            <span class="invalid-feedback"><?php echo $value_err;?></span>
                         </div>
                         <input type="submit" class="btn btn-primary" value="Pridėti">
-                        <a href="index.php" class="btn btn-secondary ml-2">Atšaukti</a>
+                        <a href="instructions.php" class="btn btn-secondary ml-2">Atšaukti</a>
                     </form>
                 </div>
             </div>        

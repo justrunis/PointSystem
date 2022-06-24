@@ -26,9 +26,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Validate name
     $input_name = trim($_POST["name"]);
     if(empty($input_name)){
-        $name_err = "Please enter a name.";
-    } elseif(!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
-        $name_err = "Please enter a valid name.";
+        $name_err = "Įveskite vardą";
     } else{
         $name = $input_name;
     }
@@ -36,7 +34,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Validate surename surename
     $input_surename = trim($_POST["surename"]);
     if(empty($input_surename)){
-        $surename_err = "Please enter an surename.";     
+        $surename_err = "Įveskite pavardę";     
     } else{
         $surename = $input_surename;
     }
@@ -44,7 +42,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Validate points
     $input_points = trim($_POST["points"]);   
     if(!is_numeric($input_points)){
-        $points_err = "Please enter a integer value.";
+        $points_err = "Įveskite taškų kiekį";
     } else{
         $points = $input_points;
     }
@@ -74,7 +72,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                 header("location: index.php");
                 exit();
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Klaida.";
             }
         }
          
@@ -119,7 +117,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                 }
                 
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Klaida";
             }
         }
         
@@ -137,10 +135,10 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 ?>
  
 <!DOCTYPE html>
-<html lang="en">
+<html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <title>Update Points</title>
+    <title>Redaguoti taškus</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .wrapper{
@@ -154,21 +152,21 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <h2 class="mt-5">Update Points</h2>
-                    <p>Please edit the input values and submit to update the student record.</p>
+                    <h2 class="mt-5">Redaguoti taškus</h2>
+                    <p>Pasirinkite taškų vertes arba įveskite konkrečią taškų vertę</p>
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Studento vardas</label>
                             <input readonly type="text" name="name" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name; ?>">
                             <span class="invalid-feedback"><?php echo $name_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Surename</label>
+                            <label>Studento pavardė</label>
                             <input readonly type="text" name="surename" class="form-control <?php echo (!empty($surename_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $surename; ?>">
                             <span class="invalid-feedback"><?php echo $surename_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Points</label>
+                            <label>Studento taškų kiekis</label>
                             <input type="text" name="points" class="form-control <?php echo (!empty($points_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $points; ?>">
                             <span class="invalid-feedback"><?php echo $points_err;?></span>
                         </div>
@@ -178,16 +176,16 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 							<label for="exampleFormControlSelect1">Option</label>
 							<select class="form-control" id="exampleFormControlSelect1" name="Add">
 								<option selected>Pasirinkite priežastį</option>
-								<option value=5>Įsijungęs kamerą</option>
-								<option value=-5>Neįsijungęs kameros</option>
-								<option value=10>Atsakytas klausimas</option>
-								<option value=-5>Neatsakytas klausimas</option>
-								<option value=15>Akyvumas paskaitoje</option>
+								<option value=5>Įsijungęs kamerą +5</option>
+								<option value=-5>Neįsijungęs kameros -5</option>
+								<option value=10>Atsakytas klausimas +10</option>
+								<option value=-5>Neatsakytas klausimas -5</option>
+								<option value=15>Akyvumas paskaitoje +15</option>
 							</select>
 						</div>
 						
-                        <input type="submit" class="btn btn-primary" value="Submit">
-                        <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+                        <input type="submit" class="btn btn-primary" value="Patvirtinti">
+                        <a href="index.php" class="btn btn-secondary ml-2">Atšaukti</a>
 						
 						<input type="submit" name="add5"
 							class="btn btn-secondary" value="+5" />
