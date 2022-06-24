@@ -20,7 +20,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $input_surename = trim($_POST["surename"]);
     if(empty($input_surename)){
         $surename_err = "Įveskite pavardę";     
-    }
     }else{
         $surename = $input_surename;
     }

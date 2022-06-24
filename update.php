@@ -125,7 +125,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         mysqli_stmt_close($stmt);
         
         // Close connection
-        mysqli_close($link);
+        //mysqli_close($link);
     }  else{
         // URL doesn't contain id parameter. Redirect to error page
         header("location: error.php");
@@ -167,11 +167,44 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                         </div>
                         <div class="form-group">
                             <label>Studento taškų kiekis</label>
-                            <input type="text" name="points" class="form-control <?php echo (!empty($points_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $points; ?>">
+                            <input readonly type="text" name="points" class="form-control <?php echo (!empty($points_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $points; ?>">
                             <span class="invalid-feedback"><?php echo $points_err;?></span>
                         </div>
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
 						
+						
+						<?php
+						// Include config file
+						require_once "config.php";
+                    
+						// Attempt select query execution
+						$sql = "SELECT * FROM evaluations ORDER BY value DESC";
+					
+						if($result = mysqli_query($link, $sql)){
+							if(mysqli_num_rows($result) > 0){
+								echo '<div class="form-group">';
+									echo '<label for="exampleFormControlSelect1">Pasirinkite įvertinimą</label>';
+									echo '<select class="form-control" id="exampleFormControlSelect1" name="Add">';
+										echo '<option selected></option>';
+										while($row = mysqli_fetch_array($result)){
+											echo "<option value=" . $row['value'] . ">" . $row['name'] . "  ( " . $row['value'] .  " )</option>";
+										}
+									echo "</select>";                            
+								echo "</div>";
+								// Free result set
+								mysqli_free_result($result);
+							} else{
+								echo '<div class="alert alert-danger"><em>Nėra vertinimų</em></div>';
+							}
+						} else{
+							echo "Klaida";
+						}
+ 
+						// Close connection
+						mysqli_close($link);
+						?>
+						
+						<!--
 						<div class="form-group">
 							<label for="exampleFormControlSelect1">Option</label>
 							<select class="form-control" id="exampleFormControlSelect1" name="Add">
@@ -182,17 +215,19 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 								<option value=-5>Neatsakytas klausimas -5</option>
 								<option value=15>Akyvumas paskaitoje +15</option>
 							</select>
-						</div>
+						</div> -->
 						
                         <input type="submit" class="btn btn-primary" value="Patvirtinti">
                         <a href="index.php" class="btn btn-secondary ml-2">Atšaukti</a>
 						
+						<!--
 						<input type="submit" name="add5"
 							class="btn btn-secondary" value="+5" />
           
 						<input type="submit" name="sub5"
 							class="btn btn-secondary" value="-5" />
 							
+						-->
 
 						
                     </form>
