@@ -5,7 +5,19 @@ require_once "config.php";
 // Define variables and initialize with empty values
 $name = $surename = $points = "";
 $name_err = $surename_err = $points_err = "";
+$add_points = "";
  
+if(isset($_POST['Add'])) {
+    $add_points = trim($_POST["Add"]);
+}
+
+if(isset($_POST['add5'])) {
+    $add_points = 5;
+}
+if(isset($_POST['sub5'])) {
+    $add_points = -5;
+}
+
 // Processing form data when form is submitted
 if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Get hidden input value
@@ -36,6 +48,10 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     } else{
         $points = $input_points;
     }
+	
+	if(is_numeric($add_points)){
+		$points = $points + $add_points;
+	}
     
     // Check input errors before inserting in database
     if(empty($name_err) && empty($surename_err) && empty($points_err)){
@@ -157,8 +173,30 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                             <span class="invalid-feedback"><?php echo $points_err;?></span>
                         </div>
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
+						
+						<div class="form-group">
+							<label for="exampleFormControlSelect1">Option</label>
+							<select class="form-control" id="exampleFormControlSelect1" name="Add">
+								<option selected>Pasirinkite priežastį</option>
+								<option value=5>Įsijungęs kamerą</option>
+								<option value=-5>Neįsijungęs kameros</option>
+								<option value=10>Atsakytas klausimas</option>
+								<option value=-5>Neatsakytas klausimas</option>
+								<option value=15>Akyvumas paskaitoje</option>
+							</select>
+						</div>
+						
                         <input type="submit" class="btn btn-primary" value="Submit">
                         <a href="index.php" class="btn btn-secondary ml-2">Cancel</a>
+						
+						<input type="submit" name="add5"
+							class="btn btn-secondary" value="+5" />
+          
+						<input type="submit" name="sub5"
+							class="btn btn-secondary" value="-5" />
+							
+
+						
                     </form>
                 </div>
             </div>        

@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         .wrapper{
             width: 600px;
@@ -27,8 +28,10 @@
     </script>
 </head>
 <body>
+	
     <div class="wrapper">
         <div class="container-fluid">
+		
             <div class="row">
                 <div class="col-md-12">
                 <h1>Student gamification application</h1>
@@ -37,12 +40,28 @@
                         <a href="instructions.php" class="btn btn-warning ml-2 pull-right"> Instructions</a>
                         
                     </div>
+					<form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
+						<div class="form-group">
+							<div class="pull-right">
+								<button type="submit" class="btn btn-secondary"><span class="fa fa-search"></span></button>
+							</div>
+						
+							<input type="text" name="search" class="form-control" style="width:90%">
+						
+						</div>
+					</form>
+					
                     <?php
                     // Include config file
                     require_once "config.php";
                     
                     // Attempt select query execution
                     $sql = "SELECT * FROM students ORDER BY points DESC";
+					
+					if(isset($_POST['search']) && !empty($_POST["search"])) {
+						$sql = "SELECT * FROM students WHERE name LIKE '%" . trim($_POST["search"]) . "%' OR surename LIKE '%" . trim($_POST["search"]) . "%' ORDER BY points DESC";
+					}
+					
                     if($result = mysqli_query($link, $sql)){
                         if(mysqli_num_rows($result) > 0){
                             echo '<table class="table table-bordered table-striped">';
